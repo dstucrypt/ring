@@ -39,6 +39,9 @@ macro_rules! u32x2 {
 
 mod sha1;
 
+/// GOST34311 implementation in rust used in DSTU4145 signatures
+pub mod gost34311;
+
 /// A context for multi-step (Init-Update-Finish) digest calculations.
 ///
 /// C analog: `EVP_MD_CTX`.

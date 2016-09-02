@@ -191,6 +191,8 @@ pub use rsa::verification::{
     RSA_PKCS1_3072_8192_SHA384,
 };
 
+pub use ec::dstu4145::params::SIGNATURE_DSTU4145_GOST34311_95;
+
 /// A public key signature returned from a signing operation.
 pub struct Signature {
     value: [u8; 64],

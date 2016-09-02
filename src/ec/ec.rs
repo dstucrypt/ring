@@ -88,5 +88,6 @@ pub mod eddsa;
 
 #[path = "suite_b/suite_b.rs"]
 pub mod suite_b;
+pub mod dstu4145;
 
 pub mod x25519;
