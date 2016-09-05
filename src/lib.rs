@@ -107,7 +107,6 @@ extern crate lazy_static;
 extern crate std;
 
 extern crate untrusted;
-extern crate num;
 
 #[macro_use]
 mod bssl;

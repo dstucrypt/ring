@@ -1,9 +1,9 @@
-use num::BigUint;
 use untrusted::Reader;
 use signature::VerificationAlgorithm;
 use error;
 use private;
 
+use super::gf2m;
 use super::curve;
 use super::dstu_params;
 use super::dstu4145::verify_helper;
@@ -25,13 +25,13 @@ struct DSTUPubKey {
     point: curve::Point,
 }
 
-fn parse_sig(data: untrusted::Input) -> Result<(BigUint, BigUint), error::Unspecified> {
+fn parse_sig(data: untrusted::Input) -> Result<(gf2m::Field, gf2m::Field), error::Unspecified> {
     let len = data.len() - 2;
     let half = len / 2;
-    let r = BigUint::from_bytes_le(
+    let r = gf2m::from_bytes_le(
         &data.as_slice_less_safe()[2..half+2]
     );
-    let s = BigUint::from_bytes_le(
+    let s = gf2m::from_bytes_le(
         &data.as_slice_less_safe()[2+half..]
     );
 
@@ -57,7 +57,7 @@ impl DSTUPubKey {
             return Err(error::Unspecified);
         }
 
-        let compressed = BigUint::from_bytes_le(
+        let compressed = gf2m::from_bytes_le(
             &data.as_slice_less_safe()[2..]
         );
         return Ok(DSTUPubKey {
@@ -70,7 +70,7 @@ impl DSTUPubKey {
         let (r, s) = try!(parse_sig(signature));
 
         let to_be_signed = gost34311::digest(msg.as_slice_less_safe());
-        let to_be_signed = BigUint::from_bytes_le(&to_be_signed);
+        let to_be_signed = gf2m::from_bytes_le(&to_be_signed);
 
         let ok = verify_helper(&self.point, &s, &r, &to_be_signed, &self.curve);
         if ok {
